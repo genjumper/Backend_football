@@ -25,33 +25,40 @@ def cambio(meta)
 return meta
 end
 
+def convierte_json()
+   #Lee el archivo json donde se guardo la informacion de los jugadores
+   json_file=File.read("jugadores.json")
+   #Convierte el archivo json a hash
+   return JSON.parse(json_file)
+end
 
-#Crea una funcion que pregunta si desea usar las metas individuales del equipo Resuelve FC o cambiarlas
+#Funcion que calcula la cantidad de goles realizados por el equipo
+def goles_equipo(hash_equipo)
+   total_goles = 0
+   hash_equipo["jugadores"].each{|key, value|
+      total_goles += key["goles"]
+   }
+   return total_goles
+end
 
+
+# Pregunta al usuario si desea usar las metas individuales del equipo Resuelve FC o cambiarlas
 
 loop do
    puts "Desea usar las metas individuales del equipo Resuelve FC S/N"
    respuesta = gets.chomp
    if respuesta.upcase == "S" 
+      puts "\n"
       break 
    elsif respuesta.upcase == "N"  
       cambio(meta_individual)
       break
    else
-      puts "Respuesta no valida"
-      puts
-      
+      puts "Respuesta no valida \n"      
    end
 
 end
 
+hash_file= convierte_json()
 
-
-p "Los bonos de los jugadores son los siguientes"
-
-#Lee el archivo json donde se guardo la informacion de los jugadores
-json_file=File.read("jugadores.json")
-#Convierte el archivo json a hash
-hash_file=JSON.parse(json_file)
-
-#p hash_file
+puts goles_equipo(hash_file)
