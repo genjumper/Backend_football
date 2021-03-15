@@ -1,42 +1,11 @@
-{
-   "jugadores" : [  
-      {  
-         "nombre":"Juan Perez",
-         "nivel":"C",
-         "goles":10,
-         "sueldo":50000,
-         "bono":25000,
-         "sueldo_completo":null,
-         "equipo":"rojo"
-      },
-      {  
-         "nombre":"EL Cuauh",
-         "nivel":"Cuauh",
-         "goles":30,
-         "sueldo":100000,
-         "bono":30000,
-         "sueldo_completo":null,
-         "equipo":"azul"
-      },
-      {  
-         "nombre":"Cosme Fulanito",
-         "nivel":"A",
-         "goles":7,
-         "sueldo":20000,
-         "bono":10000,
-         "sueldo_completo":null,
-         "equipo":"azul"
+#Modulos necesarios para trabajar con json
+#Rubygems permite que requiera gemas de ruby para poder realizar comandos
+require 'rubygems'
+#Gema de ruby que analiza gramaticamente los archivos json para convertirlos en hash de forma que ruby los pueda manejar
+require 'json'
 
-      },
-      {  
-         "nombre":"El Rulo",
-         "nivel":"B",
-         "goles":9,
-         "sueldo":30000,
-         "bono":15000,
-         "sueldo_completo":null,
-         "equipo":"rojo"
+#Lee el archivo json donde se guardo la informacion de los jugadores
+json_file=File.read("jugadores.json")
+hash_file=JSON.parse(json_file)
 
-      }
-   ]
-}
+p hash_file
