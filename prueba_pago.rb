@@ -6,29 +6,47 @@ require 'json'
 
 #Meta individual para el calculo de bono
 meta_individual = {
-   "A" =>5,
-   "B"=>10,
-   "C" => 15,
-   "Cuauh" => 20
+   A:5,
+   B:10,
+   C:15,
+   Cuauh:20
 }
 
 #Realiza el cambio de los valores de las metas individuales
-def cambio
-   p "entro" 
+#Recibe las metas individuales
+def cambio(meta)
+   #Para cada nivel pide la nueva meta
+   meta.each{|nivel, meta_indi| 
+   puts "El nivel #{nivel} tiene la meta de:"
+   reemplazar = gets.chomp
+   #Reemplaza la nueva meta al correspondiente nivel
+   meta[nivel]= reemplazar
+}
+return meta
 end
 
-#Crea una funcion que pregunta si desea usar las metas individuales del equipo Resulve FC o cambiarlas
-def cambiar_datos 
-   loop do
-      puts "Desea usar las metas individuales del equipo Resuelve FC S/N"
-      respuesta = gets.chomp.downcase
-      if respuesta == "s" then break else cambio() end
 
+#Crea una funcion que pregunta si desea usar las metas individuales del equipo Resuelve FC o cambiarlas
+
+
+loop do
+   puts "Desea usar las metas individuales del equipo Resuelve FC S/N"
+   respuesta = gets.chomp
+   if respuesta.upcase == "S" 
+      break 
+   elsif respuesta.upcase == "N"  
+      cambio(meta_individual)
+      break
+   else
+      puts "Respuesta no valida"
+      puts
+      
    end
 
 end
 
-cambiar_datos()
+
+
 p "Los bonos de los jugadores son los siguientes"
 
 #Lee el archivo json donde se guardo la informacion de los jugadores
