@@ -7,4 +7,5 @@ Para hacer funcionar correctamente el siguiente programa sera necesario los sigu
 https://www.ruby-lang.org/es/downloads/
 
 -La instalacion de la gem de ruby mediante la terminal llamando el siguiente comando
-> gem install json               Este sera necesario para que el progama pueda convertir el archivo JSON y manejarlo en el programa
+> gem install json               
+Este sera necesario para que el progama pueda convertir el archivo JSON y manejarlo en el programa
