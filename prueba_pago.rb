@@ -62,10 +62,17 @@ end
 
 #Calcula el bono de este jugador
 def bono_jugador (hash, meta)
-   goles_de_equipo = goles_equipo(hash)
-   goles_equipo_esperados = goles_esperados(hash,meta)
-   goles_esperados_jugador = 0;
+   goles_de_equipo = goles_equipo(hash).to_f
+
+   goles_equipo_esperados = goles_esperados(hash,meta).to_f
+
+   #Calcula el bono del equipo
+   porcentaje_bono_equipo = (goles_de_equipo/goles_equipo_esperados)
+   #Si el porcentaje de bono supera el 100% total del bono lo convierte al 100%
+   porcentaje_bono_equipo= 1 if porcentaje_bono_equipo>1
+
    hash["jugadores"].each {|key,value|
+      #Dependiendo del nivel del jugador se buscan los valores esperados para ese jugador
       case key["nivel"]
       when "A"
          goles_esperados_jugador = meta[:A]
@@ -76,16 +83,13 @@ def bono_jugador (hash, meta)
       when "Cuauh"
          goles_esperados_jugador = meta[:Cuauh]
       end 
-      #Calcula el bono del equipo
-      porcentaje_bono_equipo = (goles_de_equipo/goles_equipo_esperados)
-      #Si el porcentaje de bono supera el 100% total del bono lo convierte al 100%
-      porcentaje_bono_equipo= 1 if porcentaje_bono_equipo>1
-      #Calcula el bono individual
-      porcentaje_bono_individual = (key["goles"]/goles_esperados_jugador)
+      #Calcula el porcentaje de bono individual que es goles generados entre los goles esperados
+      porcentaje_bono_individual = ((key["goles"].to_f)/goles_esperados_jugador)
        #Si el porcentaje de bono supera el 100% total del bono lo convierte al 100%
       porcentaje_bono_individual= 1 if porcentaje_bono_individual>1
-      #Calcula el bono total ambos valen el 50%
+      #Calcula el bono total ambos diviendo entre 2 la suma de los dos porcentajes
       porcentaje_bono_total = (porcentaje_bono_equipo+porcentaje_bono_individual)/2
+      #Calcula el sueldo completo sumando el sueldo mas el bono por el porcentaje de bono recibido y lo guarda en el hash
       key["sueldo_completo"]= key["sueldo"]+ (key["bono"]*porcentaje_bono_total)
    }
 
@@ -108,8 +112,10 @@ loop do
 
 end
 
+#Corre la funcion de convertir JSON
 hash_file= convierte_json()
 
+#Corre la funcion de calcula bono de los jugadores
 bono_jugador(hash_file, meta_individual)
 
 
