@@ -41,6 +41,55 @@ def goles_equipo(hash_equipo)
    return total_goles
 end
 
+#Funcion que calcula la cantidad de goles esperados por el nivel de cada jugador
+def goles_esperados(hash_equipo, meta_equipo)
+   goles = 0
+   hash_equipo["jugadores"].each {|key,value|
+      case key["nivel"]
+      when "A"
+         goles += meta_equipo[:A]
+      when "B"
+         goles += meta_equipo[:B]
+      when "C"
+         goles += meta_equipo[:C]
+      when "Cuauh"
+         goles += meta_equipo[:Cuauh]
+      end
+
+}
+   return goles
+end
+
+#Calcula el bono de este jugador
+def bono_jugador (hash, meta)
+   goles_de_equipo = goles_equipo(hash)
+   goles_equipo_esperados = goles_esperados(hash,meta)
+   goles_esperados_jugador = 0;
+   hash["jugadores"].each {|key,value|
+      case key["nivel"]
+      when "A"
+         goles_esperados_jugador = meta[:A]
+      when "B"
+         goles_esperados_jugador = meta[:B]
+      when "C"
+         goles_esperados_jugador = meta[:C]
+      when "Cuauh"
+         goles_esperados_jugador = meta[:Cuauh]
+      end 
+      #Calcula el bono del equipo
+      porcentaje_bono_equipo = (goles_de_equipo/goles_equipo_esperados)
+      #Si el porcentaje de bono supera el 100% total del bono lo convierte al 100%
+      porcentaje_bono_equipo= 1 if porcentaje_bono_equipo>1
+      #Calcula el bono individual
+      porcentaje_bono_individual = (key["goles"]/goles_esperados_jugador)
+       #Si el porcentaje de bono supera el 100% total del bono lo convierte al 100%
+      porcentaje_bono_individual= 1 if porcentaje_bono_individual>1
+      #Calcula el bono total ambos valen el 50%
+      porcentaje_bono_total = (porcentaje_bono_equipo+porcentaje_bono_individual)/2
+      key["sueldo_completo"]= key["sueldo"]+ (key["bono"]*porcentaje_bono_total)
+   }
+
+end
 
 # Pregunta al usuario si desea usar las metas individuales del equipo Resuelve FC o cambiarlas
 
@@ -61,4 +110,6 @@ end
 
 hash_file= convierte_json()
 
-puts goles_equipo(hash_file)
+bono_jugador(hash_file, meta_individual)
+
+
