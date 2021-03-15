@@ -1,9 +1,11 @@
+############################################### Modulos necesarios ########################################################
 #Modulos necesarios para trabajar con json
 #Rubygems permite que requiera gemas de ruby para poder realizar comandos
 require 'rubygems'
 #Gema de ruby que analiza gramaticamente los archivos json para convertirlos en hash de forma que ruby los pueda manejar
 require 'json'
 
+############################################### Metas individuales default ########################################################
 #Meta individual para el calculo de bono
 meta_individual = {
    A:5,
@@ -12,24 +14,32 @@ meta_individual = {
    Cuauh:20
 }
 
+############################################### Funciones ########################################################
 #Realiza el cambio de los valores de las metas individuales
 #Recibe las metas individuales
 def cambio(meta)
    #Para cada nivel pide la nueva meta
    meta.each{|nivel, meta_indi| 
-   puts "El nivel #{nivel} tiene la meta de:"
-   reemplazar = gets.chomp
-   #Reemplaza la nueva meta al correspondiente nivel
-   meta[nivel]= reemplazar
-}
-return meta
+      puts "El nivel #{nivel} tiene la meta de:"
+      reemplazar = gets.chomp
+      #Reemplaza la nueva meta al correspondiente nivel
+      meta[nivel]= reemplazar
+   }
+   return meta
 end
 
+#Funcion convierte el JSON a Hash
 def convierte_json()
    #Lee el archivo json donde se guardo la informacion de los jugadores
    json_file=File.read("jugadores.json")
    #Convierte el archivo json a hash
    return JSON.parse(json_file)
+end
+
+#Funcion convierte el Hash a JSON
+def convierte_hash(hash)
+   json_converted = hash.to_json
+   return json_converted
 end
 
 #Funcion que calcula la cantidad de goles realizados por el equipo
@@ -95,11 +105,15 @@ def bono_jugador (hash, meta)
 
 end
 
+
+############################################### Ejecucion del codigo ########################################################
 # Pregunta al usuario si desea usar las metas individuales del equipo Resuelve FC o cambiarlas
 
 loop do
-   puts "Desea usar las metas individuales del equipo Resuelve FC S/N"
+   puts "Desea usar las metas individuales del equipo Resuelve FC S/N?"
+   #Espera la respuesta del usuario
    respuesta = gets.chomp
+   #Espera la respuesta del usuario para continuar
    if respuesta.upcase == "S" 
       puts "\n"
       break 
@@ -118,4 +132,8 @@ hash_file= convierte_json()
 #Corre la funcion de calcula bono de los jugadores
 bono_jugador(hash_file, meta_individual)
 
+#Corre la converion del Hash a JSON y lo muestra
+puts convierte_hash(hash_file)
 
+#Escribe en el JSON original desactivado
+#File.open("jugadores.json", 'w') { |file| file.write(hash_file) }
